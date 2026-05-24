@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USDT Pool Platform</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      color:white;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:420px;
+      background:#1e293b;
+      padding:25px;
+      border-radius:16px;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+      color:#38bdf8;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      margin-bottom:15px;
+      outline:none;
+      font-size:16px;
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      background:#38bdf8;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      margin-bottom:12px;
+      font-weight:bold;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+
+    .dashboard{
+      display:none;
+    }
+
+    .card{
+      background:#334155;
+      padding:15px;
+      border-radius:12px;
+      margin-bottom:15px;
+    }
+
+    .title{
+      font-size:15px;
+      color:#cbd5e1;
+    }
+
+    .value{
+      font-size:28px;
+      font-weight:bold;
+      margin-top:8px;
+      color:#4ade80;
+    }
+
+    .entries{
+      margin-top:10px;
+      font-size:15px;
+    }
+
+    .small{
+      font-size:13px;
+      text-align:center;
+      color:#cbd5e1;
+      margin-top:10px;
+    }
+
+/* MENU BUTTON */
+
+.menuBtn{
+  position:fixed;
+  top:15px;
+  left:15px;
+  font-size:30px;
+  cursor:pointer;
+  z-index:1000;
+  color:white;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-250px;
+  width:220px;
+  height:100%;
+  background:#111827;
+  padding:20px;
+  transition:0.3s;
+  z-index:999;
+}
+
+.sidebar h2{
+  margin-bottom:20px;
+  color:#38bdf8;
+}
+
+.sidebar button{
+  width:100%;
+  margin-bottom:12px;
+}
+
+/* TUTORIAL SECTION */
+
+#tutorialSection{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px 15px;
+}
+
+/* BIG CENTER CARD */
+
+.tutorialCard{
+  width:100%;
+  max-width:500px;
+  background:#334155;
+  border-radius:25px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+/* TITLE */
+
+.tutorialTitle{
+  font-size:32px;
+  margin-bottom:20px;
+  color:white;
+}
+
+/* VIDEO */
+
+.tutorialVideo{
+  width:100%;
+  height:350px;
+  object-fit:fill;
+  background:black;
+  border-radius:20px;
+  margin-bottom:20px;
+}
+
+/* TEXT */
+
+.tutorialText{
+  font-size:18px;
+  color:#cbd5e1;
+}
+
+  </style>
+
+</head>
+<body>
+
+<!-- MENU BUTTON -->
+
+<div class="menuBtn" onclick="openMenu()">
+  ☰
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="sidebar">
+
+  <h2>USDT Pool</h2>
+
+  <button onclick="showSection('homeSection')">
+    Dashboard
+  </button>
+
+  <button onclick="showSection('linksSection')">
+    Links
+  </button>
+
+  <button onclick="showSection('withdrawSection')">
+    Withdraw
+  </button>
+
+<button onclick="showSection('tutorialSection')">
+  Tutorial
+</button>
+
+  <button onclick="logout()">
+    Logout
+  </button>
+
+</div>
+
+  <div class="container">
+
+    <!-- LOGIN / REGISTER -->
+    <div id="authSection">
+
+      <h1>USDT DAILY POOL</h1>
+
+      <input type="email" id="email" placeholder="Enter Email">
+
+      <input type="password" id="password" placeholder="Enter Password">
+
+      <button onclick="register()">
+        Register
+      </button>
+
+      <button onclick="login()">
+        Login
+      </button>
+
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+<div id="homeSection">
+      <h1>Dashboard</h1>
+<!-- USER BALANCE -->
+
+<div class="card">
+
+  <div class="title">
+    Your Balance
+  </div>
+
+  <div class="value" id="balance">
+    0.000 USDT
+  </div>
+
+  <div class="entries">
+    Your Entries:
+    <span id="entries">0</span>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Link 1 Pool</h3>
+  <div class="value" id="pool1">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 2 Pool</h3>
+  <div class="value" id="pool2">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 3 Pool</h3>
+  <div class="value" id="pool3">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 4 Pool</h3>
+  <div class="value" id="pool4">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 5 Pool</h3>
+  <div class="value" id="pool5">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 6 Pool</h3>
+  <div class="value" id="pool6">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 7 Pool</h3>
+  <div class="value" id="pool7">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 8 Pool</h3>
+  <div class="value" id="pool8">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 9 Pool</h3>
+  <div class="value" id="pool9">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 10 Pool</h3>
+  <div class="value" id="pool10">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 11 Pool</h3>
+  <div class="value" id="pool11">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 12 Pool</h3>
+  <div class="value" id="pool12">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 13 Pool</h3>
+  <div class="value" id="pool13">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 14 Pool</h3>
+  <div class="value" id="pool14">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 15 Pool</h3>
+  <div class="value" id="pool15">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 16 Pool</h3>
+  <div class="value" id="pool16">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 17 Pool</h3>
+  <div class="value" id="pool17">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 18 Pool</h3>
+  <div class="value" id="pool18">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 19 Pool</h3>
+  <div class="value" id="pool19">0.000 USDT</div>
+</div>
+
+<div class="card">
+  <h3>Link 20 Pool</h3>
+  <div class="value" id="pool20">0.000 USDT</div>
+</div>
+        <h2 class="">
+        Each tap adds 0.002 USDT to the pool, not directly to balance.
+      </h2>
+
+    </div>
+
+
+      </div>
+
+<div id="linksSection" style="display:none;">
+
+  <!-- ALL LINK BUTTONS HERE -->
+<button onclick="tapLink(1)">
+  Link 1
+</button>
+
+<button onclick="tapLink(2)">
+  Link 2
+</button>
+
+<button onclick="tapLink(3)">
+  Link 3
+</button>
+
+<button onclick="tapLink(4)">
+  Link 4
+</button>
+
+<button onclick="tapLink(5)">
+  Link 5
+</button>
+
+<button onclick="tapLink(6)">
+  Link 6
+</button>
+
+<button onclick="tapLink(7)">
+  Link 7
+</button>
+
+<button onclick="tapLink(8)">
+  Link 8
+</button>
+
+<button onclick="tapLink(9)">
+  Link 9
+</button>
+
+<button onclick="tapLink(10)">
+  Link 10
+</button>
+
+<button onclick="tapLink(11)">
+  Link 11
+</button>
+
+<button onclick="tapLink(12)">
+  Link 12
+</button>
+
+<button onclick="tapLink(13)">
+  Link 13
+</button>
+
+<button onclick="tapLink(14)">
+  Link 14
+</button>
+
+<button onclick="tapLink(15)">
+  Link 15
+</button>
+
+<button onclick="tapLink(16)">
+  Link 16
+</button>
+
+<button onclick="tapLink(17)">
+  Link 17
+</button>
+
+<button onclick="tapLink(18)">
+  Link 18
+</button>
+
+<button onclick="tapLink(19)">
+  Link 19
+</button>
+
+<button onclick="tapLink(20)">
+  Link 20
+</button>
+</div>
+
+<div id="withdrawSection" style="display:none;">
+
+  <button onclick="withdraw()">
+    Withdraw Balance
+  </button>
+
+</div>
+    </div>
+
+
+
+<div id="tutorialSection" style="display:none;">
+
+  <div class="tutorialCard">
+
+    <h2 class="tutorialTitle">
+      How To Complete Links
+    </h2>
+
+    <video class="tutorialVideo" controls>
+
+      <source src="tutorial.mp4" type="video/mp4">
+
+    </video>
+
+    <h2 class="tutorialText">
+      Watch this tutorial before opening links.
+    </h2>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <script>
+
+    // CURRENT USER
+    let currentUser = null;
+
+    // DAILY POOL DATA
+    let poolAmount =
+      Number(localStorage.getItem("poolAmount")) || 0;
+
+
+    let participants =
+      JSON.parse(localStorage.getItem("participants")) || [];
+
+// LINK POOLS
+
+let LinkPools = JSON.parse(
+  localStorage.getItem("linkPools")
+) || {
+
+  1: 0,
+  2: 0,
+  3: 0,
+  4: 0,
+  5: 0,
+  6: 0,
+  7: 0,
+  8: 0,
+  9: 0,
+  10: 0,
+  11: 0,
+  12: 0,
+  13: 0,
+  14: 0,
+  15: 0,
+  16: 0,
+  17: 0,
+  18: 0,
+  19: 0,
+  20: 0
+
+};
+
+console.log("Supabase Connected");
+
+const SUPABASE_URL =
+  "https://xlxbmhpqclyhetpjhoun.supabase.co";
+
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhseGJtaHBxY2x5aGV0cGpob3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NjYzMzksImV4cCI6MjA5NTE0MjMzOX0.CMKA3JzSlC8zTYmNxxCJFJaTuibBgpr7Flcj_P4zVxU";
+
+const supabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+async function testSupabase(){
+
+  const { data, error } =
+    await supabase
+    .from("Link_pools")
+    .select("*");
+
+  if(error){
+
+    alert("Supabase Error");
+
+  }else{
+
+    alert("Supabase Connected Successfully");
+
+  }
+}
+
+testSupabase();
+
+    // REGISTER
+    function register(){
+
+      const email =
+        document.getElementById("email").value;
+
+      const password =
+        document.getElementById("password").value;
+
+      if(email === "" || password === ""){
+        alert("Fill all fields");
+        return;
+      }
+
+      const user = {
+        email: email,
+        password: password,
+        balance: 0,
+        entries: 0
+      };
+
+      localStorage.setItem(email, JSON.stringify(user));
+
+      alert("Registration Successful");
+    }
+
+
+
+    // LOGIN
+    function login(){
+
+      const email =
+        document.getElementById("email").value;
+
+      const password =
+        document.getElementById("password").value;
+
+      const savedUser =
+        localStorage.getItem(email);
+
+      if(savedUser === null){
+        alert("User not found");
+        return;
+      }
+
+      const user = JSON.parse(savedUser);
+
+      if(user.password !== password){
+        alert("Wrong Password");
+        return;
+      }
+
+      currentUser = user;
+
+localStorage.setItem(
+  "loggedInUser",
+  JSON.stringify(currentUser)
+);
+
+      document.getElementById("authSection").style.display = "none";
+
+      document.getElementById("dashboard").style.display = "block";
+
+      updateDashboard();
+    }
+
+// OPEN MENU
+
+function openMenu(){
+
+  // BLOCK MENU IF NOT LOGGED IN
+  if(currentUser === null){
+
+    alert("Login First");
+
+    return;
+  }
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  if(sidebar.style.left === "0px"){
+
+    sidebar.style.left = "-250px";
+
+  }else{
+
+    sidebar.style.left = "0px";
+
+  }
+
+}
+
+function showSection(sectionId){
+
+  // HIDE ALL SECTIONS
+
+  document.getElementById(
+    "homeSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "linksSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "tutorialSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "withdrawSection"
+  ).style.display = "none";
+
+  // SHOW ONLY SELECTED SECTION
+
+  document.getElementById(
+    sectionId
+  ).style.display = "block";
+
+  // CLOSE SIDEBAR
+
+  document.getElementById(
+    "sidebar"
+  ).style.left = "-250px";
+
+}
+
+function updateDashboard(){
+
+  document.getElementById("balance").innerText =
+    currentUser.balance.toFixed(3) + " USDT";
+
+  document.getElementById("entries").innerText =
+    currentUser.entries;
+
+  // UPDATE ALL LINK POOLS
+
+  for(let i = 1; i <= 20; i++){
+
+    document.getElementById("pool" + i).innerText =
+      linkPools[i].toFixed(3) + " USDT";
+
+  }
+
+}
+
+function tapLink(linkNumber){
+
+  // GET TODAY DATE
+  const today =
+    new Date().toDateString();
+
+  // UNIQUE CLICK KEY
+  const clickKey =
+    currentUser.email + "_link_" +
+    linkNumber + "_" + today;
+
+  // CHECK IF USER ALREADY CLICKED TODAY
+  if(localStorage.getItem(clickKey)){
+
+    alert(
+      "You already used Link " +
+      linkNumber +
+      " today"
+    );
+
+    return;
+  }
+
+  // YOUR 20 LINKS
+  const links = [
+
+    "https://shrinkme.click/the-shadows-edge-2025",
+    "https://shrinkme.click/ruthlessbastardsmovie",
+    "https://shrinkme.click/Thesonofrevenge",
+    "https://shrinkme.click/PANDAPLAN2",
+    "https://shrinkme.click/DIRTYHANDS",
+
+    "https://shrinkme.click/IMMORTALCOMBAT",
+    "https://shrinkme.click/Riseoftheconqueror",
+    "https://shrinkme.click/NECROPOLIS",
+    "https://shrinkme.click/Detectivekien",
+    "https://shrinkme.click/VERSA",
+
+    "https://shrinkme.click/VERSA",
+    "https://shrinkme.click/Detectivekien",
+    "https://shrinkme.click/NECROPOLIS",
+    "https://shrinkme.click/Riseoftheconqueror",
+    "https://shrinkme.click/IMMORTALCOMBAT",
+
+    "https://shrinkme.click/DIRTYHANDS",
+    "https://shrinkme.click/PANDAPLAN2",
+    "https://shrinkme.click/Thesonofrevenge",
+    "https://shrinkme.click/ruthlessbastardsmovie",
+    "https://shrinkme.click/the-shadows-edge-2025"
+
+  ];
+
+  // OPEN LINK
+  window.open(
+    links[linkNumber - 1],
+    "_blank"
+  );
+
+  // SAVE CLICK
+  localStorage.setItem(clickKey, "clicked");
+
+// ADD TO SPECIFIC LINK POOL
+linkPools[linkNumber] += 0.002;
+
+
+// SAVE LINK POOLS
+localStorage.setItem(
+  "linkPools",
+  JSON.stringify(linkPools)
+);
+
+currentUser.entries += 1;
+
+
+  // SAVE USER
+  localStorage.setItem(
+    currentUser.email,
+    JSON.stringify(currentUser)
+  );
+
+  // ADD USER TO PARTICIPANTS
+  participants.push(currentUser.email);
+
+  // SAVE POOL
+  localStorage.setItem(
+    "poolAmount",
+    poolAmount
+  );
+
+  localStorage.setItem(
+    "participants",
+    JSON.stringify(participants)
+  );
+
+  updateDashboard();
+
+  alert(
+    "0.002 USDT Added To Pool"
+  );
+}
+
+    // PICK RANDOM WINNER
+    function pickWinner(){
+
+  if(participants.length === 0){
+    alert("No participants yet");
+    return;
+  }
+
+  // RANDOM WINNER
+  const randomIndex =
+    Math.floor(Math.random() * participants.length);
+
+  const winnerEmail =
+    participants[randomIndex];
+
+  // GET WINNER DATA
+  let winnerData =
+    JSON.parse(localStorage.getItem(winnerEmail));
+
+  // ADD POOL TO WINNER BALANCE
+  winnerData.balance += poolAmount;
+
+  // SAVE UPDATED WINNER
+  localStorage.setItem(
+    winnerEmail,
+    JSON.stringify(winnerData)
+  );
+
+  // IF CURRENT USER IS THE WINNER
+  // REFRESH CURRENT USER DATA
+  if(currentUser.email === winnerEmail){
+    currentUser = winnerData;
+  }
+
+  alert(
+    "Winner: " +
+    winnerEmail +
+    "\nWon: " +
+    poolAmount.toFixed(3) +
+    " USDT"
+  );
+
+  // RESET POOL
+  poolAmount = 0;
+  participants = [];
+
+  localStorage.setItem("poolAmount", 0);
+
+  localStorage.setItem(
+    "participants",
+    JSON.stringify([])
+  );
+
+  // UPDATE SCREEN
+  updateDashboard();
+}
+
+    // WITHDRAW
+  function withdraw(){
+
+  const wallet =
+    prompt("Enter Your USDT Wallet Address");
+
+  if(wallet === null || wallet === ""){
+    return;
+  }
+
+  const amount =
+    prompt("Enter Amount");
+
+  if(amount === null || amount === ""){
+    return;
+  }
+
+  // CONVERT TO NUMBER
+  const withdrawAmount = Number(amount);
+
+  // CHECK VALID NUMBER
+  if(isNaN(withdrawAmount) || withdrawAmount <= 0){
+
+    alert("Enter a valid amount");
+
+    return;
+  }
+
+  // CHECK USER BALANCE
+  if(withdrawAmount > currentUser.balance){
+
+    alert(
+      "Insufficient Balance\n\n" +
+      "Your Balance: " +
+      currentUser.balance.toFixed(3) +
+      " USDT"
+    );
+
+    return;
+  }
+
+  // REMOVE BALANCE
+  currentUser.balance -= withdrawAmount;
+
+  // SAVE UPDATED USER
+  localStorage.setItem(
+    currentUser.email,
+    JSON.stringify(currentUser)
+  );
+
+  // UPDATE SCREEN
+  updateDashboard();
+
+  alert(
+    "Withdrawal Request Submitted\n\n" +
+    "Amount: " +
+    withdrawAmount.toFixed(3) +
+    " USDT"
+  );
+}
+
+    // LOGOUT
+    function logout(){
+
+      currentUser = null;
+
+      document.getElementById("dashboard").style.display = "none";
+
+      document.getElementById("authSection").style.display = "block";
+    }
+
+  </script>
+
+</body>
+</html>
