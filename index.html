@@ -964,6 +964,9 @@ function tapLink(linkNumber){
     "_blank"
   );
 
+// ADD TO SUPABASE POOL
+addToPool(linkNumber);
+  
   // SAVE CLICK
   localStorage.setItem(clickKey, "clicked");
 
