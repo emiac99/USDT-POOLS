@@ -1004,6 +1004,53 @@ currentUser.entries += 1;
 
 }
 
+async function addToPool(linkNumber){
+
+  // GET CURRENT POOL
+
+  const { data, error } =
+  await supabaseClient
+    .from("Link_pools")
+    .select("*")
+    .eq("link_number", linkNumber)
+    .maybeSingle();
+
+  if(error || !data){
+
+    alert("Pool Not Found");
+    return;
+
+  }
+
+  // NEW AMOUNT
+
+  const newAmount =
+  Number(data.pool_amount) + 0.002;
+
+  // UPDATE POOL
+
+  const { error:updateError } =
+  await supabaseClient
+    .from("Link_pools")
+    .update({
+
+      pool_amount:newAmount
+
+    })
+    .eq("link_number", linkNumber);
+
+  if(updateError){
+
+    alert(updateError.message);
+
+  }else{
+
+    loadPools();
+
+  }
+
+    }
+    
     async function withdraw(){
 
   const amount =
