@@ -734,55 +734,6 @@ async function pickWinner(linkNumber){
   const newBalance =
   Number(userData.balance) + reward;
 
-  // UPDATE USER
-
-  const { error:updateError } =
-  await supabaseClient
-    .from("Users")
-    .update({
-
-      balance:newBalance
-
-    })
-    .eq("email", winner.email);
-
-  if(updateError){
-
-    alert(updateError.message);
-    return;
-
-  }
-
-  alert("Balance Updated");
-
-  // RESET POOL
-
-  await supabaseClient
-    .from("Link_pools")
-    .update({
-
-      pool_amount:0
-
-    })
-    .eq("link_number", Number(linkNumber));
-
-  // DELETE ENTRIES
-
-  await supabaseClient
-    .from("pool_entries")
-    .delete()
-    .eq("link_number", Number(linkNumber));
-
-  alert(
-
-    winner.email +
-    " won " +
-    reward +
-    " USDT"
-
-  );
-
-  }
   
     // REGISTER
 async function register(){
