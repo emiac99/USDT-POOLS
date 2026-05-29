@@ -596,7 +596,7 @@ async function pickWinner(linkNumber){
   // GET ENTRIES
 
   const { data, error } =
-    await supabase
+    await supabaseClient
       .from("pool_entries")
       .select("*")
       .eq("link_number", linkNumber);
@@ -621,7 +621,7 @@ async function pickWinner(linkNumber){
   // GET POOL AMOUNT
 
   const { data: poolData } =
-    await supabase
+    await supabaseClient
       .from("Link_pools")
       .select("*")
       .eq("link_number", linkNumber)
@@ -633,7 +633,7 @@ async function pickWinner(linkNumber){
   // GET USER
 
   const { data: userData } =
-    await supabase
+    await supabaseClient
       .from("Users")
       .select("*")
       .eq("email", winner.email)
@@ -644,7 +644,7 @@ async function pickWinner(linkNumber){
   const newBalance =
     Number(userData.balance) + reward;
 
-  await supabase
+  await supabaseClient
     .from("Users")
     .update({
       balance: newBalance
@@ -653,7 +653,7 @@ async function pickWinner(linkNumber){
 
   // RESET POOL
 
-  await supabase
+  await supabaseClient
     .from("Link_pools")
     .update({
       pool_amount: 0
