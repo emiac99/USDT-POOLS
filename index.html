@@ -649,25 +649,141 @@ async function pickWinner(linkNumber){
     .update({
       balance: newBalance
     })
+  
+async function pickWinner(linkNumber){
+
+  alert("Button Clicked");
+
+  // GET ENTRIES
+
+  const { data, error } =
+  await supabaseClient
+    .from("pool_entries")
+    .select("*")
+    .eq("link_number", Number(linkNumber));
+
+  if(error){
+
+    alert(error.message);
+    return;
+
+  }
+
+  alert(JSON.stringify(data));
+
+  if(!data || data.length === 0){
+
+    alert("No Entries Found");
+    return;
+
+  }
+
+  // RANDOM WINNER
+
+  const randomIndex =
+  Math.floor(
+    Math.random() * data.length
+  );
+
+  const winner =
+  data[randomIndex];
+
+  alert("Winner Selected");
+
+  // GET POOL
+
+  const { data: poolData, error: poolError } =
+  await supabaseClient
+    .from("Link_pools")
+    .select("*")
+    .eq("link_number", Number(linkNumber))
+    .maybeSingle();
+
+  if(poolError){
+
+    alert(poolError.message);
+    return;
+
+  }
+
+  alert("Pool Found");
+
+  const reward =
+  Number(poolData.pool_amount);
+
+  // GET USER
+
+  const { data: userData, error:userError } =
+  await supabaseClient
+    .from("Users")
+    .select("*")
+    .eq("email", winner.email)
+    .maybeSingle();
+
+  if(userError){
+
+    alert(userError.message);
+    return;
+
+  }
+
+  alert("User Found");
+
+  // NEW BALANCE
+
+  const newBalance =
+  Number(userData.balance) + reward;
+
+  // UPDATE USER
+
+  const { error:updateError } =
+  await supabaseClient
+    .from("Users")
+    .update({
+
+      balance:newBalance
+
+    })
     .eq("email", winner.email);
+
+  if(updateError){
+
+    alert(updateError.message);
+    return;
+
+  }
+
+  alert("Balance Updated");
 
   // RESET POOL
 
   await supabaseClient
     .from("Link_pools")
     .update({
-      pool_amount: 0
+
+      pool_amount:0
+
     })
-    .eq("link_number", linkNumber);
+    .eq("link_number", Number(linkNumber));
+
+  // DELETE ENTRIES
+
+  await supabaseClient
+    .from("pool_entries")
+    .delete()
+    .eq("link_number", Number(linkNumber));
 
   alert(
+
     winner.email +
     " won " +
     reward +
     " USDT"
+
   );
 
-}
+  }
+  
     // REGISTER
 async function register(){
 
