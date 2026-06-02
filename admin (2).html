@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Panel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+body{
+
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:#38bdf8;
+  text-align:center;
+  padding:20px;
+
+}
+
+h1{
+
+  margin-bottom:30px;
+
+}
+
+button{
+
+  display:block;
+  margin:10px auto;
+  padding:14px;
+  width:220px;
+  border:none;
+  border-radius:12px;
+  background:#38bdf8;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+
+}
+
+button:hover{
+
+  opacity:0.9;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>ADMIN WINNER PANEL</h1>
+
+<div id="buttonsContainer" style="display:none;">
+
+  <button onclick="pickWinner()">
+    Pick Winner
+  </button>
+
+</div>
+
+<script type="module">
+
+// SUPABASE
+
+const SUPABASE_URL =
+"https://xlxbmhpqclyhetpjhoun.supabase.co";
+
+const SUPABASE_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhseGJtaHBxY2x5aGV0cGpob3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NjYzMzksImV4cCI6MjA5NTE0MjMzOX0.CMKA3JzSlC8zTYmNxxCJFJaTuibBgpr7Flcj_P4zVxU";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+// ADMIN PASSWORD
+
+const enteredPassword =
+prompt("Enter Admin Password");
+
+// GET REAL PASSWORD FROM DATABASE
+
+const { data } =
+await supabaseClient
+  .from("admin_settings")
+  .select("*")
+  .maybeSingle();
+
+if(
+  !data ||
+  enteredPassword !== data.admin_password
+){
+
+  document.body.innerHTML =
+  "<h1>Access Denied</h1>";
+
+}else{
+
+  document
+  .getElementById(
+    "buttonsContainer"
+  ).style.display = "block";
+
+
+}
+
+// PICK WINNER FUNCTION
+
+async function pickWinner(){
+
+  alert("Button Clicked");
+
+  // GET ALL ENTRIES
+
+  const { data, error } =
+  await supabaseClient
+    .from("pool_entries")
+    .select("*");
+
+  if(error){
+
+    alert(error.message);
+    return;
+
+  }
+
+  if(!data || data.length === 0){
+
+    alert("No Entries Found");
+    return;
+
+  }
+
+  // RANDOM WINNER
+
+  const randomIndex =
+  Math.floor(
+    Math.random() * data.length
+  );
+
+  const winner =
+  data[randomIndex];
+
+  // GET POOL
+
+  const { data: poolData, error: poolError } =
+  await supabaseClient
+    .from("Link_pools")
+    .select("*")
+    .eq("link_number", 1)
+    .maybeSingle();
+
+  if(poolError){
+
+    alert(poolError.message);
+    return;
+
+  }
+
+  const reward =
+  Number(poolData.pool_amount);
+
+  // GET USER
+
+  const { data: userData, error:userError } =
+  await supabaseClient
+    .from("Users")
+    .select("*")
+    .eq("email", winner.email)
+    .maybeSingle();
+
+  if(userError){
+
+    alert(userError.message);
+    return;
+
+  }
+
+  // ADD REWARD
+
+  const newBalance =
+  Number(userData.balance)
+  + reward;
+
+  const { error:updateError } =
+  await supabaseClient
+    .from("Users")
+    .update({
+
+      balance:newBalance
+
+    })
+    .eq("email", winner.email);
+
+  if(updateError){
+
+    alert(updateError.message);
+    return;
+
+  }
+
+  // RESET POOL
+
+  await supabaseClient
+    .from("Link_pools")
+    .update({
+
+      pool_amount:0
+
+    })
+    .eq("link_number", 1);
+
+  // CLEAR ENTRIES
+
+  await supabaseClient
+    .from("pool_entries")
+    .delete();
+
+  alert(
+
+    winner.email +
+    " won " +
+    reward +
+    " USDT"
+
+  );
+
+}
+
+</script>
+
+</body>
+</html>
