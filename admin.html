@@ -84,7 +84,7 @@ window.supabase.createClient(
 // ADMIN PASSWORD
 
 const enteredPassword =
-prompt("Temiac99a@$");
+prompt("Enter Admin Password");
 
 // GET REAL PASSWORD FROM DATABASE
 
@@ -172,7 +172,7 @@ async function pickWinner(){
 
   const { data: userData, error:userError } =
   await supabaseClient
-    .from("users")
+    .from("Users")
     .select("*")
     .eq("email", winner.email)
     .maybeSingle();
