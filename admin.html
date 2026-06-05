@@ -172,7 +172,7 @@ async function pickWinner(){
 
   const { data: userData, error:userError } =
   await supabaseClient
-    .from("Users")
+    .from("users")
     .select("*")
     .eq("email", winner.email)
     .maybeSingle();
