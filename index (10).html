@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USDT Pool Platform</title>
+  
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      color:white;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:420px;
+      background:#1e293b;
+      padding:25px;
+      border-radius:16px;
+      box-shadow:0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+      color:#38bdf8;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      margin-bottom:15px;
+      outline:none;
+      font-size:16px;
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      background:#38bdf8;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      margin-bottom:12px;
+      font-weight:bold;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+
+    .dashboard{
+      display:none;
+    }
+
+    .card{
+      background:#334155;
+      padding:15px;
+      border-radius:12px;
+      margin-bottom:15px;
+    }
+
+    .title{
+      font-size:15px;
+      color:#cbd5e1;
+    }
+
+    .value{
+      font-size:28px;
+      font-weight:bold;
+      margin-top:8px;
+      color:#4ade80;
+    }
+
+    .entries{
+      margin-top:10px;
+      font-size:15px;
+    }
+
+    .small{
+      font-size:13px;
+      text-align:center;
+      color:#cbd5e1;
+      margin-top:10px;
+    }
+
+/* MENU BUTTON */
+
+.menuBtn{
+  position:fixed;
+  top:15px;
+  left:15px;
+  font-size:30px;
+  cursor:pointer;
+  z-index:1000;
+  color:white;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-250px;
+  width:220px;
+  height:100%;
+  background:#111827;
+  padding:20px;
+  transition:0.3s;
+  z-index:999;
+}
+
+.sidebar h2{
+  margin-bottom:20px;
+  color:#38bdf8;
+}
+
+.sidebar button{
+  width:100%;
+  margin-bottom:12px;
+}
+
+/* TUTORIAL SECTION */
+
+#tutorialSection{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px 15px;
+}
+
+/* BIG CENTER CARD */
+
+.tutorialCard{
+  width:100%;
+  max-width:500px;
+  background:#334155;
+  border-radius:25px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+/* TITLE */
+
+.tutorialTitle{
+  font-size:32px;
+  margin-bottom:20px;
+  color:white;
+}
+
+/* VIDEO */
+
+.tutorialVideo{
+  width:100%;
+  height:350px;
+  object-fit:fill;
+  background:black;
+  border-radius:20px;
+  margin-bottom:20px;
+}
+
+/* TEXT */
+
+.tutorialText{
+  font-size:18px;
+  color:#cbd5e1;
+}
+
+  </style>
+
+</head>
+<body>
+
+
+<!-- MENU BUTTON -->
+
+<div class="menuBtn" onclick="openMenu()">
+  ☰
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="sidebar">
+
+  <h2>USDT Pool</h2>
+
+  <button onclick="showSection('homeSection')">
+    Dashboard
+  </button>
+
+  <button onclick="showSection('linksSection')">
+    Links
+  </button>
+
+  <button onclick="showSection('withdrawSection')">
+    Withdraw
+  </button>
+
+<button onclick="showSection('tutorialSection')">
+  Tutorial
+</button>
+
+  <button onclick="logout()">
+    Logout
+  </button>
+
+</div>
+
+  <div class="container">
+
+    <!-- LOGIN / REGISTER -->
+    <div id="authSection">
+
+      <h1>USDT DAILY POOL</h1>
+
+      <input type="email" id="email" placeholder="Enter Email">
+
+      <input type="password" id="password" placeholder="Enter Password">
+
+<a href="https://t.me/+srBnJKE5kzQ1NDhk"
+   target="_blank"
+   style="display:block;
+          text-align:center;
+          margin-bottom:15px;
+          color:#38bdf8;">
+  Join Our Telegram Group First
+</a>
+
+<label style="display:block;margin-bottom:15px;">
+  <input type="checkbox" id="joinedTelegram">
+  I have joined the Telegram group
+</label>
+
+      <button onclick="register()">
+        Register
+      </button>
+
+      <button onclick="login()">
+        Login
+      </button>
+
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+<div id="homeSection">
+      <h1>Dashboard</h1>
+<!-- USER BALANCE -->
+
+<div class="card">
+
+  <div class="title">
+    Your Balance
+  </div>
+
+  <div class="value" id="balance">
+    0.000 USDT
+  </div>
+
+  <div class="entries">
+    Your Entries:
+    <span id="entries">0</span>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Link 1 Pool</h3>
+  <div class="value" id="pool1">0.000 USDT</div>
+</div>
+        <h2 class="">
+        Each tap adds 0.001 USDT to the pool, not directly to balance.
+      </h2>
+
+    </div>
+
+
+      </div>
+
+<div id="linksSection" style="display:none;">
+
+  <!-- ALL LINK BUTTONS HERE -->
+<button onclick="tapLink(1)">
+  Link 1
+</button>
+</div>
+
+<div id="withdrawSection" style="display:none;">
+
+  <button onclick="withdraw()">
+    Withdraw Balance
+  </button>
+
+<div class="card">
+
+  <h3>
+    Withdrawal Status
+  </h3>
+
+  <div id="withdrawStatus">
+    No Withdrawal Yet
+  </div>
+
+</div>
+
+</div>
+    </div>
+
+
+
+<div id="tutorialSection" style="display:none;">
+
+  <div class="tutorialCard">
+
+    <h2 class="tutorialTitle">
+      How To Complete Links
+    </h2>
+
+    <video class="tutorialVideo" controls>
+
+      <source src="tutorial.mp4" type="video/mp4">
+
+    </video>
+
+    <h2 class="tutorialText">
+      Watch this tutorial before opening links.
+    </h2>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+</script>  
+  <script>
+
+    // CURRENT USER
+    let currentUser = null;
+
+    // DAILY POOL DATA
+    let poolAmount =
+      Number(localStorage.getItem("poolAmount")) || 0;
+
+
+    let participants =
+      JSON.parse(localStorage.getItem("participants")) || [];
+
+// LINK POOLS
+
+let LinkPools = JSON.parse(
+  localStorage.getItem("LinkPools")
+) || {
+
+  1: 0
+
+};
+
+console.log("Supabase Connected");
+
+const SUPABASE_URL =
+  "https://xlxbmhpqclyhetpjhoun.supabase.co";
+
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhseGJtaHBxY2x5aGV0cGpob3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NjYzMzksImV4cCI6MjA5NTE0MjMzOX0.CMKA3JzSlC8zTYmNxxCJFJaTuibBgpr7Flcj_P4zVxU";
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+async function loadPools(){
+
+  const { data, error } =
+    await supabaseClient
+    .from("Link_pools")
+    .select("*");
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+  }
+
+  data.forEach(pool => {
+
+    document.getElementById(
+      "pool" + pool.link_number
+    ).innerText =
+      pool.pool_amount.toFixed(3)
+      + " USDT";
+
+  });
+
+}
+
+    // REGISTER
+async function register(){
+
+  const email =
+  document.getElementById("email").value;
+
+  const password =
+  document.getElementById("password").value;
+
+if(
+    !document.getElementById("joinedTelegram").checked
+  ){
+    
+    alert(
+      "Please join our Telegram group first"
+    );
+    return;
+  }
+  if(email === "" || password === ""){
+
+    alert("Fill all fields");
+    return;
+
+  }
+
+  // CREATE AUTH ACCOUNT
+
+  const { data, error } =
+  await supabaseClient.auth.signUp({
+
+    email: email,
+    password: password
+
+  });
+
+  if(error){
+
+    alert(error.message);
+    return;
+
+  }
+
+  // CREATE USER TABLE RECORD
+
+  const { error: insertError } =
+  await supabaseClient
+    .from("Users")
+    .insert([{
+
+      email: email,
+      balance: 0,
+      entries: 0
+
+    }]);
+
+  if(insertError){
+
+    alert(insertError.message);
+    return;
+
+  }
+
+  alert("Registration Successful");
+
+}
+
+
+
+// LOGIN
+async function login(){
+
+  const email =
+  document.getElementById("email").value;
+
+  const password =
+  document.getElementById("password").value;
+
+  // LOGIN AUTH
+
+  const { data, error } =
+  await supabaseClient.auth.signInWithPassword({
+
+    email: email,
+    password: password
+
+  });
+
+  if(error){
+
+    alert(error.message);
+    return;
+
+  }
+
+  // GET USER DATA
+
+  const { data: userData, error: userError } =
+  await supabaseClient
+    .from("Users")
+    .select("*")
+    .eq("email", email)
+    .maybeSingle();
+
+  if(userError){
+
+    alert(userError.message);
+    return;
+
+  }
+
+  // CREATE USER RECORD IF MISSING
+
+  if(!userData){
+
+    const { error: createError } =
+    await supabaseClient
+      .from("Users")
+      .insert([{
+
+        email: email,
+        balance: 0,
+        entries: 0
+
+      }]);
+
+    if(createError){
+
+      alert(createError.message);
+      return;
+
+    }
+
+    currentUser = {
+
+      email: email,
+      balance: 0,
+      entries: 0
+
+    };
+
+  }else{
+
+    currentUser = userData;
+
+  }
+
+  localStorage.setItem(
+    "currentEmail",
+    email
+  );
+
+  document.getElementById(
+    "authSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "dashboard"
+  ).style.display = "block";
+
+  updateDashboard();
+
+  loadWithdrawalStatus();
+
+  loadPools();
+
+}
+
+// OPEN MENU
+
+function openMenu(){
+
+  // BLOCK MENU IF NOT LOGGED IN
+  if(currentUser === null){
+
+    alert("Login First");
+
+    return;
+  }
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  if(sidebar.style.left === "0px"){
+
+    sidebar.style.left = "-250px";
+
+  }else{
+
+    sidebar.style.left = "0px";
+
+  }
+
+}
+
+function showSection(sectionId){
+
+  // HIDE ALL SECTIONS
+
+  document.getElementById(
+    "homeSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "linksSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "tutorialSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "withdrawSection"
+  ).style.display = "none";
+
+  // SHOW ONLY SELECTED SECTION
+
+  document.getElementById(
+    sectionId
+  ).style.display = "block";
+
+  // CLOSE SIDEBAR
+
+  document.getElementById(
+    "sidebar"
+  ).style.left = "-250px";
+
+}
+
+function updateDashboard(){
+
+  document.getElementById("balance").innerText =
+    Number(currentUser.balance).toFixed(3) + " USDT";
+
+  document.getElementById("entries").innerText =
+    currentUser.entries;
+
+}
+
+function tapLink(linkNumber){
+
+  // GET TODAY DATE
+  const today =
+    new Date().toDateString();
+
+  // UNIQUE CLICK KEY
+  const clickKey =
+    currentUser.email + "_link_" +
+    linkNumber + "_" + today;
+
+  // CHECK IF USER ALREADY CLICKED TODAY
+  if(localStorage.getItem(clickKey)){
+
+    alert(
+      "You already used Link " +
+      linkNumber +
+      " today"
+    );
+
+    return;
+  }
+
+  // YOUR 20 LINKS
+  const links = [
+
+    "https://shrinkme.click/Rewardhtml1"
+
+  ];
+
+  // OPEN LINK
+  window.open(
+    links[linkNumber - 1],
+    "_blank"
+  );
+  // SAVE CLICK
+  localStorage.setItem(clickKey, "clicked");
+
+// SAVE LINK POOLS
+localStorage.setItem(
+  "LinkPools",
+  JSON.stringify(linkPools)
+);
+
+currentUser.entries += 1;
+
+
+  // SAVE USER
+  localStorage.setItem(
+    currentUser.email,
+    JSON.stringify(currentUser)
+  );
+
+  // ADD USER TO PARTICIPANTS
+  participants.push(currentUser.email);
+
+  // SAVE POOL
+  localStorage.setItem(
+    "poolAmount",
+    poolAmount
+  );
+
+  localStorage.setItem(
+    "participants",
+    JSON.stringify(participants)
+  );
+
+  updateDashboard();
+
+
+}
+
+    async function withdraw(){
+
+  const amount =
+  Number(
+    prompt("Enter withdrawal amount")
+  );
+
+  if(amount <= 0){
+
+    alert("Invalid Amount");
+    return;
+
+  }
+
+const walletAddress =
+prompt(
+  "Enter USDT Wallet Address"
+);
+
+if(!walletAddress){
+
+  alert(
+    "Wallet address required"
+  );
+
+  return;
+
+}
+
+  // MINIMUM WITHDRAWAL
+
+  if(amount < 10){
+
+    alert(
+      "Minimum withdrawal is 10 USDT"
+    );
+
+    return;
+
+  }
+
+  // GET USER
+
+  const { data:userData } =
+  await supabase
+    .from("Users")
+    .select("*")
+    .eq("email", currentUser.email)
+    .maybeSingle();
+
+  const currentBalance =
+  Number(userData.balance);
+
+  // CHECK BALANCE
+
+  if(amount > currentBalance){
+
+    alert(
+      "Insufficient Balance"
+    );
+
+    return;
+
+  }
+
+  // NEW BALANCE
+
+  const newBalance =
+  currentBalance - amount;
+
+  // SUBTRACT BALANCE IMMEDIATELY
+
+  await supabase
+    .from("Users")
+    .update({
+
+      balance:newBalance
+
+    })
+    .eq("email", currentUser.email);
+
+  // CREATE REQUEST
+
+  const { error } =
+  await supabase
+    .from("withdraw_requests")
+    .insert([{
+
+      email:currentUser.email,
+      amount:amount,
+      wallet_address:walletAddress,
+      status:"pending"
+
+    }]);
+
+  if(error){
+
+    alert(
+      "Withdrawal Failed"
+    );
+
+  }else{
+
+    alert(
+      "Withdrawal Request Submitted"
+    );
+
+    currentUser.balance =
+    newBalance;
+
+    updateDashboard();
+
+    loadWithdrawalStatus();
+
+  }
+
+}
+
+async function loadWithdrawalStatus(){
+
+  const { data, error } =
+  await supabase
+    .from("withdraw_requests")
+    .select("*")
+    .eq("email", currentUser.email)
+    .order("id",{ascending:false})
+    .limit(1)
+    .maybeSingle();
+
+  if(data){
+
+    document.getElementById(
+      "withdrawStatus"
+    ).innerHTML =
+
+    "Amount: " +
+    data.amount +
+    " USDT<br>Status: " +
+    data.status;
+
+  }
+
+}
+
+function logout(){
+
+  currentUser = null;
+
+  localStorage.removeItem("loggedInUser");
+
+  // HIDE DASHBOARD
+
+  document.getElementById(
+    "dashboard"
+  ).style.display = "none";
+
+  // SHOW LOGIN
+
+  document.getElementById(
+    "authSection"
+  ).style.display = "block";
+
+  // CLOSE SIDEBAR
+
+  document.getElementById(
+    "sidebar"
+  ).style.left = "-250px";
+
+  // HIDE ALL SECTIONS
+
+  document.getElementById(
+    "linksSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "withdrawSection"
+  ).style.display = "none";
+
+  document.getElementById(
+    "tutorialSection"
+  ).style.display = "none";
+
+}
+
+setInterval(() => {
+
+  loadPools();
+
+}, 5000);
+
+  </script>
+
+</body>
+</html>
